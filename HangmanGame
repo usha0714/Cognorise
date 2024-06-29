@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+public class HangmanGame {
+    private static final String[] WORDS = {
+        "programming", "java", "computer", "hangman", "game", "random", "scanner", "array"
+    };
+    private static final int MAX_ATTEMPTS = 6;
+
+    public static void main(String[] args) {
+        Random random = new Random();
+        Scanner scanner = new Scanner(System.in);
+
+        String wordToGuess = WORDS[random.nextInt(WORDS.length)];
+        char[] guessedWord = new char[wordToGuess.length()];
+        for (int i = 0; i < guessedWord.length; i++) {
+            guessedWord[i] = '_';
+        }
+
+        List<Character> incorrectGuesses = new ArrayList<>();
+        List<Character> correctGuesses = new ArrayList<>();
+        int attemptsLeft = MAX_ATTEMPTS;
+        boolean wordGuessed = false;
+
+        System.out.println("Welcome to the Hangman Game!");
+
+        while (attemptsLeft > 0 && !wordGuessed) {
+            System.out.println("\nWord to guess: " + new String(guessedWord));
+            System.out.println("Incorrect guesses: " + incorrectGuesses);
+            System.out.println("Attempts left: " + attemptsLeft);
+            System.out.print("Enter a letter: ");
+            char guess = scanner.next().toLowerCase().charAt(0);
+
+            if (Character.isLetter(guess)) {
+                if (correctGuesses.contains(guess) || incorrectGuesses.contains(guess)) {
+                    System.out.println("You already guessed that letter. Try again.");
+                } else {
+                    boolean correctGuess = false;
+                    for (int i = 0; i < wordToGuess.length(); i++) {
+                        if (wordToGuess.charAt(i) == guess) {
+                            guessedWord[i] = guess;
+                            correctGuess = true;
+                        }
+                    }
+
+                    if (correctGuess) {
+                        correctGuesses.add(guess);
+                    } else {
+                        incorrectGuesses.add(guess);
+                        attemptsLeft--;
+                    }
+
+                    displayHangman(attemptsLeft);
+
+                    if (new String(guessedWord).equals(wordToGuess)) {
+                        wordGuessed = true;
+                        System.out.println("Congratulations! You've guessed the word: " + wordToGuess);
+                    }
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid letter.");
+            }
+        }
+
+        if (!wordGuessed) {
+            System.out.println("Sorry, you've run out of attempts. The word was: " + wordToGuess);
+        }
+
+        scanner.close();
+    }
+
+    private static void displayHangman(int attemptsLeft) {
+        switch (attemptsLeft) {
+            case 6:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 5:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 4:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |    |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 3:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |   /|");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 2:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |   /|\\");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 1:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |   /|\\");
+                System.out.println(" |   /");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+            case 0:
+                System.out.println(" ------");
+                System.out.println(" |    |");
+                System.out.println(" |    O");
+                System.out.println(" |   /|\\");
+                System.out.println(" |   / \\");
+                System.out.println(" |");
+                System.out.println(" |");
+                System.out.println("---------");
+                break;
+        }
+    }
+}
